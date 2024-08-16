@@ -1,7 +1,10 @@
 import typescript from 'rollup-plugin-typescript2';
-import pkg from './package.json';
+import { defineConfig } from 'rollup';
+import { readFileSync } from 'fs';
 
-export default {
+const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'));
+
+export default defineConfig({
 	input: 'src/index.ts',
 	output: [
 		{
@@ -22,5 +25,5 @@ export default {
 			tsconfig: 'tsconfig.json',
 		}),
 	],
-	external: ['react', 'react-dom', 'lucide-react', 'react-query', 'zod', 'tailwindcss'],
-};
+	external: ['react', 'react-dom', 'lucide-react', 'swr', 'zustand', 'tailwindcss'],
+});
