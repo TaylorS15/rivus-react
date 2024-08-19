@@ -4,17 +4,26 @@ import { ConversationData } from '../types';
 import { postQuestion } from '../api';
 import { useRivusContext } from './RivusProvider';
 
-export default function ChatInput({
-	containerClassName,
-	inputPlaceholder,
-	inputClassName,
-	buttonClassName,
-}: {
-	containerClassName?: string;
-	inputPlaceholder?: string;
-	inputClassName?: string;
-	buttonClassName?: string;
-}) {
+interface InputContextType {
+	question: string;
+	setQuestion: React.Dispatch<React.SetStateAction<string>>;
+	isResponseReceiving: boolean;
+	handleQuestionSubmit: () => void;
+}
+
+const InputContext = React.createContext<InputContextType | null>(null);
+
+export const useInputContext = () => {
+	const context = React.useContext(InputContext);
+
+	if (!context) {
+		throw new Error('useInputContext must be used within a InputProvider');
+	}
+
+	return context;
+};
+
+export function InputProvider({ children }: { children: React.ReactNode }): JSX.Element {
 	const [question, setQuestion] = React.useState('');
 	const [isResponseReceiving, setIsResponseReceiving] = React.useState(false);
 
@@ -57,20 +66,28 @@ export default function ChatInput({
 	}
 
 	return (
-		<div className={containerClassName}>
-			<input
-				type="text"
-				value={question}
-				onChange={(e) => setQuestion(e.target.value)}
-				placeholder={inputPlaceholder}
-				className={inputClassName}
-			/>
-			<button
-				onClick={handleQuestionSubmit}
-				disabled={isResponseReceiving}
-				className={buttonClassName}>
-				Submit
-			</button>
-		</div>
+		<InputContext.Provider
+			value={{
+				question,
+				setQuestion,
+				isResponseReceiving,
+				handleQuestionSubmit,
+			}}>
+			{children}
+		</InputContext.Provider>
+	);
+}
+
+export default function UserInput({
+	className,
+	children,
+}: {
+	className?: string;
+	children?: React.ReactNode;
+}) {
+	return (
+		<InputProvider>
+			<div className={className}>{children}</div>
+		</InputProvider>
 	);
 }

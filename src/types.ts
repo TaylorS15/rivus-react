@@ -1,4 +1,4 @@
-export interface ConversationMetadata<OptionalMetadata = { unknown }> {
+export interface ConversationMetadata<OptionalMetadata = unknown> {
 	title: string;
 	userId: string;
 	conversationId: string;

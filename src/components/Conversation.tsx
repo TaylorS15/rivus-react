@@ -7,19 +7,15 @@ import useRivusStore from '../store';
 import { getConversationData } from '../api';
 import { useRivusContext } from './RivusProvider';
 
-export default function Conversation() {
+export default function Conversation({ className }: { className?: string }) {
 	const { selectedConversation, setSelectedConversation } = useRivusStore();
 	const { endpoints, authenticationToken, loadingComponent, errorComponent } =
 		useRivusContext();
 
-	if (!selectedConversation) {
-		return null;
-	}
-
 	const conversationDataQuery = useSWR<ConversationData | undefined>(
-		['conversation-data', selectedConversation.conversationId],
+		['conversation-data', selectedConversation?.conversationId],
 		async () => {
-			if (!selectedConversation.conversationId) {
+			if (!selectedConversation || !selectedConversation.conversationId) {
 				return undefined;
 			}
 
@@ -37,6 +33,10 @@ export default function Conversation() {
 		}
 	}, [conversationDataQuery.data]);
 
+	if (!selectedConversation) {
+		return null;
+	}
+
 	if (conversationDataQuery.isLoading) {
 		return <>{loadingComponent}</>;
 	}
@@ -46,10 +46,10 @@ export default function Conversation() {
 	}
 
 	return (
-		<>
+		<div className={className}>
 			{selectedConversation.messages.map((chat, index) => (
 				<ChatBubble key={index} content={chat.content} role={chat.role} />
 			))}
-		</>
+		</div>
 	);
 }

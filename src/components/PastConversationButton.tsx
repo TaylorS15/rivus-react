@@ -2,37 +2,20 @@ import React, { useState } from 'react';
 import { ConversationMetadata } from '../types';
 import { Check, Trash2, X } from 'lucide-react';
 import useRivusStore from '../store';
-import useSWR from 'swr';
-import { getPastConversations, deleteConversation } from '../api';
+import { deleteConversation } from '../api';
 import { useRivusContext } from './RivusProvider';
 
 export default function PastConversationButton({
 	conversation,
+	refetch,
 }: {
 	conversation: ConversationMetadata;
+	refetch: () => void;
 }) {
 	const [isDeleting, setIsDeleting] = useState(false);
 
 	const { setSelectedConversation } = useRivusStore();
-	const { authenticationToken, loadingComponent, errorComponent, endpoints } =
-		useRivusContext();
-
-	const pastConversationsQuery = useSWR<ConversationMetadata[]>(
-		['past-conversations'],
-		async () =>
-			await getPastConversations(
-				authenticationToken,
-				endpoints.getPastConversations
-			)
-	);
-
-	if (pastConversationsQuery.isLoading) {
-		return <>{loadingComponent}</>;
-	}
-
-	if (pastConversationsQuery.error) {
-		return <>{errorComponent}</>;
-	}
+	const { authenticationToken, endpoints } = useRivusContext();
 
 	return (
 		<div
@@ -56,7 +39,7 @@ export default function PastConversationButton({
 								endpoints.deleteConversation,
 								authenticationToken
 							);
-							pastConversationsQuery.mutate();
+							refetch();
 						}}>
 						<Check size={18} color="#3f3f46" />
 					</button>
