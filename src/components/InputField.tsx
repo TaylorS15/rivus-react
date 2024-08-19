@@ -1,13 +1,8 @@
 import React from 'react';
-import { useInputContext } from './UserInput';
+import { useInputContext } from './InputProvider';
+import { InputFieldProps } from '../types';
 
-export default function InputField({
-	className,
-	placeholder,
-}: {
-	className?: string;
-	placeholder?: string;
-}) {
+export default function InputField(props: InputFieldProps) {
 	const { question, setQuestion, isResponseReceiving } = useInputContext();
 
 	return (
@@ -15,9 +10,10 @@ export default function InputField({
 			type="text"
 			value={question}
 			onChange={(e) => setQuestion(e.target.value)}
-			placeholder={placeholder}
+			placeholder={props.placeholder}
 			disabled={isResponseReceiving}
-			className={className}
+			className={props.className}
+			{...props}
 		/>
 	);
 }

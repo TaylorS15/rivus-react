@@ -1,5 +1,15 @@
 import { create } from 'zustand';
-import { RivusStore } from './types';
+import { ConversationData, ConversationMetadata } from './types';
+
+interface RivusStore {
+	pastConversations: ConversationMetadata[];
+	selectedConversation: ConversationData | undefined;
+	currentConversationId: string | undefined;
+	setPastConversations: (pastConversations: ConversationMetadata[]) => void;
+	setSelectedConversation: (conversation: ConversationData) => void;
+	updateAiResponse: (chunk: string) => void;
+	setCurrentConversationId: (conversationId: string) => void;
+}
 
 const useRivusStore = create<RivusStore>()((set) => ({
 	pastConversations: [],

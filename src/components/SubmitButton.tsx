@@ -1,22 +1,18 @@
 import React from 'react';
-import { useInputContext } from './UserInput';
+import { useInputContext } from './InputProvider';
+import { SubmitButtonProps } from '../types';
 
-export default function SubmitButton({
-	className,
-	text,
-}: {
-	className?: string;
-	text: string;
-}) {
+export default function SubmitButton(props: SubmitButtonProps) {
 	const { isResponseReceiving, handleQuestionSubmit } = useInputContext();
 
 	return (
 		<button
 			type="submit"
-			className={className}
+			className={props.className}
 			onClick={handleQuestionSubmit}
-			disabled={isResponseReceiving}>
-			{text}
+			disabled={isResponseReceiving}
+			{...props}>
+			{props.text}
 		</button>
 	);
 }

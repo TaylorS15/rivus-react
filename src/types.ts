@@ -1,3 +1,4 @@
+// Basic data structures
 export interface ConversationMetadata<OptionalMetadata = unknown> {
 	title: string;
 	userId: string;
@@ -15,6 +16,7 @@ export interface ConversationData {
 	}[];
 }
 
+// Configuration and options
 export interface RivusOptions {
 	authenticationToken?: string;
 	endpoints: {
@@ -25,14 +27,49 @@ export interface RivusOptions {
 	};
 	loadingComponent: React.ReactNode;
 	errorComponent: React.ReactNode;
+	chatErrorMessage: string;
+	enableChatBubbleAnimations: boolean;
 }
 
-export interface RivusStore {
-	pastConversations: ConversationMetadata[];
-	selectedConversation: ConversationData | undefined;
-	currentConversationId: string | undefined;
-	setPastConversations: (pastConversations: ConversationMetadata[]) => void;
-	setSelectedConversation: (conversation: ConversationData) => void;
-	updateAiResponse: (chunk: string) => void;
-	setCurrentConversationId: (conversationId: string) => void;
+// Component props
+export interface ChatBubbleProps {
+	role: 'user' | 'assistant';
+	content: string;
+	showAnimations: boolean;
+	className?: string;
+}
+
+export interface ConversationProps {
+	className?: string;
+	chatBubbleClassName?: string;
+}
+
+export interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {}
+
+export interface PastConversationButtonProps {
+	conversation: ConversationMetadata;
+	iconColor: string;
+	refetch: () => void;
+	className?: string;
+}
+
+export interface RivusProviderProps {
+	children: React.ReactNode;
+	options: RivusOptions;
+}
+
+export interface SubmitButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+	text: string;
+}
+
+export interface UserInputProps {
+	children?: React.ReactNode;
+	className?: string;
+}
+
+export interface PastConversationProps {
+	className?: string;
+	children?: React.ReactNode;
+	pastConversationButtonIconColor: string;
+	pastConversationButtonClassName: string;
 }

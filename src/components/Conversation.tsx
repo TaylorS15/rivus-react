@@ -1,5 +1,5 @@
 import React from 'react';
-import { ConversationData } from '../types';
+import { ConversationData, ConversationProps } from '../types';
 import { useEffect } from 'react';
 import useSWR from 'swr';
 import ChatBubble from './ChatBubble';
@@ -7,10 +7,19 @@ import useRivusStore from '../store';
 import { getConversationData } from '../api';
 import { useRivusContext } from './RivusProvider';
 
-export default function Conversation({ className }: { className?: string }) {
-	const { selectedConversation, setSelectedConversation } = useRivusStore();
-	const { endpoints, authenticationToken, loadingComponent, errorComponent } =
-		useRivusContext();
+export default function Conversation(props: ConversationProps) {
+	const selectedConversation = useRivusStore((state) => state.selectedConversation);
+	const setSelectedConversation = useRivusStore(
+		(state) => state.setSelectedConversation
+	);
+
+	const {
+		endpoints,
+		authenticationToken,
+		loadingComponent,
+		errorComponent,
+		enableChatBubbleAnimations,
+	} = useRivusContext();
 
 	const conversationDataQuery = useSWR<ConversationData | undefined>(
 		['conversation-data', selectedConversation?.conversationId],
@@ -46,9 +55,15 @@ export default function Conversation({ className }: { className?: string }) {
 	}
 
 	return (
-		<div className={className}>
+		<div className={props.className}>
 			{selectedConversation.messages.map((chat, index) => (
-				<ChatBubble key={index} content={chat.content} role={chat.role} />
+				<ChatBubble
+					key={index}
+					content={chat.content}
+					role={chat.role}
+					showAnimations={enableChatBubbleAnimations}
+					className={props.chatBubbleClassName}
+				/>
 			))}
 		</div>
 	);

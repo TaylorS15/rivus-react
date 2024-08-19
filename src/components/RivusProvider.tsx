@@ -1,16 +1,14 @@
 import React, { createContext, useContext } from 'react';
-import { RivusOptions } from '../types';
+import { RivusOptions, RivusProviderProps } from '../types';
 
 const RivusContext = createContext<RivusOptions | null>(null);
 
-export function RivusProvider({
-	children,
-	options,
-}: {
-	children: React.ReactNode;
-	options: RivusOptions;
-}) {
-	return <RivusContext.Provider value={options}>{children}</RivusContext.Provider>;
+export function RivusProvider(props: RivusProviderProps) {
+	return (
+		<RivusContext.Provider value={props.options}>
+			{props.children}
+		</RivusContext.Provider>
+	);
 }
 
 export const useRivusContext = () => {

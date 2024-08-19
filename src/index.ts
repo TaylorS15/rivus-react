@@ -1,3 +1,4 @@
+import './styles.css';
 export { default as UserInput } from './components/UserInput';
 export { default as InputField } from './components/InputField';
 export { default as SubmitButton } from './components/SubmitButton';
