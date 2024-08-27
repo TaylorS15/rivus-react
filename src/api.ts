@@ -1,6 +1,6 @@
 import { ConversationData, ConversationMetadata } from './types';
 
-const apiUrl = process.env.NEXT_PUBLIC_RIVUS_API_URL;
+const apiUrl = process.env.NEXT_PUBLIC_RIVUS_API_URL ?? process.env.RIVUS_API_URL;
 if (!apiUrl) {
 	throw new Error('API URL is not defined');
 }
@@ -14,8 +14,7 @@ export async function getConversationData(
 		throw new Error('Conversation ID is required');
 	}
 
-	const url = new URL(`${apiUrl}/${endpoint}`);
-	url.searchParams.append('conversationId', conversationId);
+	const url = `${apiUrl}/${endpoint}/?conversationId=${conversationId}`;
 
 	const headers: HeadersInit = {
 		'Content-Type': 'application/json',
@@ -25,7 +24,7 @@ export async function getConversationData(
 	}
 
 	try {
-		const response = await fetch(url.toString(), {
+		const response = await fetch(url, {
 			method: 'GET',
 			headers,
 		});
@@ -61,7 +60,7 @@ export async function getPastConversations(
 	token: string | undefined,
 	endpoint: string
 ): Promise<ConversationMetadata[]> {
-	const url = new URL(`${apiUrl}/${endpoint}`);
+	const url = `${apiUrl}/${endpoint}`;
 
 	const headers: HeadersInit = {
 		'Content-Type': 'application/json',
@@ -98,9 +97,9 @@ export async function getPastConversations(
 						'conversationId' in conversation &&
 						typeof conversation.conversationId === 'string' &&
 						'updatedAt' in conversation &&
-						typeof conversation.lastUpdated === 'number' &&
+						typeof conversation.updatedAt === 'number' &&
 						'createdAt' in conversation &&
-						typeof conversation.created === 'number'
+						typeof conversation.createdAt === 'number'
 					);
 				})
 			);
@@ -121,8 +120,7 @@ export async function deleteConversation(
 	endpoint: string,
 	token: string | undefined
 ) {
-	const url = new URL(`${apiUrl}/${endpoint}`);
-	url.searchParams.append('conversationId', conversationId);
+	let url = `${apiUrl}/${endpoint}?conversationId=${conversationId}`;
 
 	const headers: HeadersInit = {
 		'Content-Type': 'application/json',
@@ -153,7 +151,7 @@ export async function postQuestion(
 	onDone: () => void,
 	onError: (error: Error) => void
 ) {
-	const url = new URL(`${apiUrl}/${endpoint}`);
+	const url = `${apiUrl}/${endpoint}`;
 
 	const headers: HeadersInit = {
 		'Content-Type': 'application/json',
@@ -163,7 +161,7 @@ export async function postQuestion(
 	}
 
 	try {
-		const response = await fetch(url.toString(), {
+		const response = await fetch(url, {
 			method: 'POST',
 			headers,
 			body: JSON.stringify(conversation),

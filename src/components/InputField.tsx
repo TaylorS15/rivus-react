@@ -10,9 +10,9 @@ export default function InputField(props: InputFieldProps) {
 			type="text"
 			value={question}
 			onChange={(e) => setQuestion(e.target.value)}
-			placeholder={props.placeholder}
 			disabled={isResponseReceiving}
 			className={props.className}
+			placeholder={props.placeholder}
 			{...props}
 		/>
 	);

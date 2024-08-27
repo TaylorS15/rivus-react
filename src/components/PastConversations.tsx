@@ -28,20 +28,20 @@ export default function PastConversations(props: PastConversationProps) {
 	}, [pastConversationsQuery.data]);
 
 	if (pastConversationsQuery.error) {
-		return <>{errorComponent}</>;
+		return <div className={props.className?.container}>{errorComponent}</div>;
 	}
 
 	if (pastConversationsQuery.isLoading) {
-		return <>{loadingComponent}</>;
+		return <div className={props.className?.container}>{loadingComponent}</div>;
 	}
 
 	return (
-		<div className={props.className}>
+		<div className={props.className?.container}>
 			{pastConversations.map((conversation, index) => (
 				<PastConversationButton
 					key={index}
-					iconColor={props.pastConversationButtonIconColor}
-					className={props.pastConversationButtonClassName}
+					iconColor={props.iconColor}
+					className={props.className?.pastConversationButton}
 					conversation={conversation}
 					refetch={pastConversationsQuery.mutate}
 				/>

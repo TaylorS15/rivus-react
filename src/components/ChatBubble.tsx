@@ -16,7 +16,7 @@ export default function ChatBubble(props: ChatBubbleProps) {
 		<div
 			className={clsx('chat-bubble', props.className)}
 			data-role={props.role}
-			data-loaded={props.showAnimations ? isLoaded : null}>
+			data-loaded={isLoaded}>
 			<p>{props.content}</p>
 		</div>
 	);

@@ -1,23 +1,25 @@
+import { ButtonHTMLAttributes, HTMLAttributes, InputHTMLAttributes } from 'react';
+
 // Basic data structures
-export interface ConversationMetadata<OptionalMetadata = unknown> {
+export type ConversationMetadata<OptionalMetadata = unknown> = {
 	title: string;
 	userId: string;
 	conversationId: string;
-	lastUpdated: number;
-	created: number;
+	updatedAt: number;
+	createdAt: number;
 	metadata?: OptionalMetadata;
-}
+};
 
-export interface ConversationData {
+export type ConversationData = {
 	conversationId: string | null;
 	messages: {
 		content: string;
 		role: 'user' | 'assistant';
 	}[];
-}
+};
 
 // Configuration and options
-export interface RivusOptions {
+export type RivusOptions = {
 	authenticationToken?: string;
 	endpoints: {
 		getPastConversations: string;
@@ -28,48 +30,51 @@ export interface RivusOptions {
 	loadingComponent: React.ReactNode;
 	errorComponent: React.ReactNode;
 	chatErrorMessage: string;
-	enableChatBubbleAnimations: boolean;
-}
+};
 
 // Component props
-export interface ChatBubbleProps {
-	role: 'user' | 'assistant';
-	content: string;
-	showAnimations: boolean;
-	className?: string;
-}
-
-export interface ConversationProps {
-	className?: string;
-	chatBubbleClassName?: string;
-}
-
-export interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {}
-
-export interface PastConversationButtonProps {
-	conversation: ConversationMetadata;
-	iconColor: string;
-	refetch: () => void;
-	className?: string;
-}
-
-export interface RivusProviderProps {
+export type RivusProviderProps = {
 	children: React.ReactNode;
 	options: RivusOptions;
-}
+};
 
-export interface SubmitButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export type ConversationProps = {
+	className?: {
+		container: string;
+		userMessage: string;
+		assistantMessage: string;
+	};
+};
+
+export type ChatBubbleProps = {
+	role: 'user' | 'assistant';
+	content: string;
+	className?: string;
+};
+
+export type PastConversationProps = {
+	className?: {
+		container: string;
+		pastConversationButton: string;
+	};
+	children?: React.ReactNode;
+	iconColor?: string;
+};
+
+export type PastConversationButtonProps = {
+	conversation: ConversationMetadata;
+	iconColor?: string;
+	refetch: () => void;
+	className?: string;
+};
+
+export type InputFieldProps = InputHTMLAttributes<HTMLInputElement>;
+
+export type SubmitButtonProps = {
 	text: string;
-}
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
-export interface UserInputProps {
+export type UserInputProps = {
 	children?: React.ReactNode;
 	className?: string;
-}
-
-export interface PastConversationProps {
-	className?: string;
-	children?: React.ReactNode;
-	pastConversationButtonIconColor: string;
-	pastConversationButtonClassName: string;
-}
+};
