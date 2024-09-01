@@ -4,11 +4,11 @@ Rivus React is an easy-to-implement library for adding AI chat messaging to any 
 
 ## Features
 
--   Seamless integration with your React frontend
--   Support for OpenAI text completions and Claude messages
--   Streaming and non-streaming response options
--   Minimal styling for easy customization
--   TypeScript support
+- Seamless integration with your React frontend
+- Support for OpenAI text completions and Claude messages
+- Streaming and non-streaming response options
+- Minimal styling for easy customization
+- TypeScript support
 
 ## Installation
 
@@ -88,12 +88,12 @@ Rivus is minimally styled to allow for easy customization. Import the base style
 
 ## API Responses
 
-Rivus expects specific response types for its endpoints:
+Rivus expects specific response types from the set endpoints:
 
--   `deleteConversation`: Status codes 200-299 are considered successful
--   `postQuestion`: [TODO: Add expected response format]
--   `getConversationData`: JSON response of type `ConversationData`
--   `getPastConversations`: JSON response of type `ConversationMetadata[]`
+- `deleteConversation`: Status codes 200-299 are considered successful
+- `postQuestion`: Streamed responses must be chunks of data structured as `data: TEXT_DELTA` where TEXT_DELTA is whatever current token(s) are being sent as an SSE (ReadableStream). Rivus ends the stream when `data: [DONE]` is found. Non-streamed responses read the entire response as text using `response.text()`.
+- `getConversationData`: JSON response of type `ConversationData`
+- `getPastConversations`: JSON response of type `ConversationMetadata[]`
 
 ## Data Types
 
