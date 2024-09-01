@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, HTMLAttributes, InputHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, InputHTMLAttributes } from 'react';
 
 // Basic data structures
 export type ConversationMetadata<OptionalMetadata = unknown> = {
@@ -20,16 +20,35 @@ export type ConversationData = {
 
 // Configuration and options
 export type RivusOptions = {
+	/** Used as a bearer token sent with all requests, if specified. Parsed by reading the Authorization header on a request and stripping the `Bearer ` from the string. */
 	authenticationToken?: string;
+	/** Backend API url used by fetchers. Typically set by env variable.
+	 * @EXAMPLE fetch(`${apiUrl}/${endpoint}`, ...)
+	 */
+	apiUrl: string;
+	/** Set the backend endpoints each fetch function will hit when sending the corresponding requests.
+	 * @EXAMPLE fetch(`${apiUrl}/${endpoint}`, ...)
+	 */
 	endpoints: {
 		getPastConversations: string;
+		getConversationData: string;
 		postQuestion: string;
 		deleteConversation: string;
-		getConversationData: string;
 	};
+	/** Sets whether AI question responses will be read by stream or by full request body. */
+	streamResponses: boolean;
+	/** Used to provide a custom loading indicator when different parts of the UI are waiting on response. */
 	loadingComponent: React.ReactNode;
+	/** Used to provide a custom error notifier when different parts of the UI haven't received a proper response. */
 	errorComponent: React.ReactNode;
+	/** Displayed as a AI response message when there was an error in reading a response or failing to receive one. */
 	chatErrorMessage: string;
+};
+
+export type ApiOptions = {
+	url: string;
+	endpoint: string;
+	token?: string;
 };
 
 // Component props
@@ -43,6 +62,7 @@ export type ConversationProps = {
 		container: string;
 		userMessage: string;
 		assistantMessage: string;
+		noSelectedConversationText: string;
 	};
 };
 

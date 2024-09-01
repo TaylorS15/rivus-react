@@ -33,7 +33,8 @@ export function InputProvider({ children }: { children: React.ReactNode }): JSX.
 	);
 	const updateAiResponse = useRivusStore((state) => state.updateAiResponse);
 
-	const { authenticationToken, endpoints, chatErrorMessage } = useRivusContext();
+	const { authenticationToken, endpoints, chatErrorMessage, apiUrl, streamResponses } =
+		useRivusContext();
 
 	async function handleQuestionSubmit() {
 		setQuestion('');
@@ -54,8 +55,12 @@ export function InputProvider({ children }: { children: React.ReactNode }): JSX.
 
 		await postQuestion(
 			updatedConversation,
-			endpoints.postQuestion,
-			authenticationToken,
+			{
+				endpoint: endpoints.postQuestion,
+				url: apiUrl,
+				token: authenticationToken,
+			},
+			streamResponses,
 			updateAiResponse,
 			() => {
 				setIsResponseReceiving(false);

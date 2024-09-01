@@ -12,7 +12,7 @@ export default function Conversation(props: ConversationProps) {
 		(state) => state.setSelectedConversation
 	);
 
-	const { endpoints, authenticationToken, loadingComponent, errorComponent } =
+	const { endpoints, authenticationToken, loadingComponent, errorComponent, apiUrl } =
 		useRivusContext();
 
 	const conversationDataQuery = useSWR<ConversationData | undefined>(
@@ -24,11 +24,11 @@ export default function Conversation(props: ConversationProps) {
 				return undefined;
 			}
 
-			return await getConversationData(
-				selectedConversation.conversationId,
-				endpoints.getConversationData,
-				authenticationToken
-			);
+			return await getConversationData(selectedConversation.conversationId, {
+				url: apiUrl,
+				endpoint: endpoints.getConversationData,
+				token: authenticationToken,
+			});
 		}
 	);
 
@@ -49,7 +49,9 @@ export default function Conversation(props: ConversationProps) {
 	return (
 		<div className={props.className?.container}>
 			{!selectedConversation ? (
-				<p>No conversation selected</p>
+				<p className={props.className?.noSelectedConversationText}>
+					No conversation selected
+				</p>
 			) : (
 				<>
 					{selectedConversation.messages.map((chat, index) => (

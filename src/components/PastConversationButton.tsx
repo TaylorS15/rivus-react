@@ -12,7 +12,7 @@ export default function PastConversationButton(props: PastConversationButtonProp
 	const setSelectedConversation = useRivusStore(
 		(state) => state.setSelectedConversation
 	);
-	const { authenticationToken, endpoints } = useRivusContext();
+	const { authenticationToken, endpoints, apiUrl } = useRivusContext();
 
 	return (
 		<div
@@ -31,11 +31,11 @@ export default function PastConversationButton(props: PastConversationButtonProp
 					<button
 						onClick={async (e) => {
 							e.stopPropagation();
-							await deleteConversation(
-								props.conversation.conversationId,
-								endpoints.deleteConversation,
-								authenticationToken
-							);
+							await deleteConversation(props.conversation.conversationId, {
+								endpoint: endpoints.deleteConversation,
+								url: apiUrl,
+								token: authenticationToken,
+							});
 							props.refetch();
 						}}>
 						<Check

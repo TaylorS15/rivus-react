@@ -1,26 +1,20 @@
-import { ConversationData, ConversationMetadata } from './types';
-
-const apiUrl = process.env.NEXT_PUBLIC_RIVUS_API_URL ?? process.env.RIVUS_API_URL;
-if (!apiUrl) {
-	throw new Error('API URL is not defined');
-}
+import { ApiOptions, ConversationData, ConversationMetadata } from './types';
 
 export async function getConversationData(
 	conversationId: string,
-	endpoint: string,
-	token: string | undefined
+	apiOptions: ApiOptions
 ): Promise<ConversationData> {
 	if (!conversationId) {
 		throw new Error('Conversation ID is required');
 	}
 
-	const url = `${apiUrl}/${endpoint}/?conversationId=${conversationId}`;
+	const url = `${apiOptions.url}/${apiOptions.endpoint}/?conversationId=${conversationId}`;
 
 	const headers: HeadersInit = {
 		'Content-Type': 'application/json',
 	};
-	if (token) {
-		headers['Authorization'] = `Bearer ${token}`;
+	if (apiOptions.token) {
+		headers['Authorization'] = `Bearer ${apiOptions.token}`;
 	}
 
 	try {
@@ -57,16 +51,15 @@ export async function getConversationData(
 }
 
 export async function getPastConversations(
-	token: string | undefined,
-	endpoint: string
+	apiOptions: ApiOptions
 ): Promise<ConversationMetadata[]> {
-	const url = `${apiUrl}/${endpoint}`;
+	const url = `${apiOptions.url}/${apiOptions.endpoint}`;
 
 	const headers: HeadersInit = {
 		'Content-Type': 'application/json',
 	};
-	if (token) {
-		headers['Authorization'] = `Bearer ${token}`;
+	if (apiOptions.token) {
+		headers['Authorization'] = `Bearer ${apiOptions.token}`;
 	}
 
 	try {
@@ -115,22 +108,18 @@ export async function getPastConversations(
 	}
 }
 
-export async function deleteConversation(
-	conversationId: string,
-	endpoint: string,
-	token: string | undefined
-) {
-	let url = `${apiUrl}/${endpoint}?conversationId=${conversationId}`;
+export async function deleteConversation(conversationId: string, apiOptions: ApiOptions) {
+	let url = `${apiOptions.url}/${apiOptions.endpoint}?conversationId=${conversationId}`;
 
 	const headers: HeadersInit = {
 		'Content-Type': 'application/json',
 	};
-	if (token) {
-		headers['Authorization'] = `Bearer ${token}`;
+	if (apiOptions.token) {
+		headers['Authorization'] = `Bearer ${apiOptions.token}`;
 	}
 
 	try {
-		const response = await fetch(url.toString(), {
+		const response = await fetch(url, {
 			method: 'DELETE',
 			headers,
 		});
@@ -145,19 +134,19 @@ export async function deleteConversation(
 
 export async function postQuestion(
 	conversation: ConversationData,
-	endpoint: string,
-	token: string | undefined,
+	apiOptions: ApiOptions,
+	stream: boolean,
 	onChunk: (chunk: string) => void,
 	onDone: () => void,
 	onError: (error: Error) => void
 ) {
-	const url = `${apiUrl}/${endpoint}`;
+	const url = `${apiOptions.url}/${apiOptions.endpoint}`;
 
 	const headers: HeadersInit = {
 		'Content-Type': 'application/json',
 	};
-	if (token) {
-		headers['Authorization'] = `Bearer ${token}`;
+	if (apiOptions.token) {
+		headers['Authorization'] = `Bearer ${apiOptions.token}`;
 	}
 
 	try {
@@ -169,6 +158,11 @@ export async function postQuestion(
 
 		if (!response.ok) {
 			throw new Error('Failed to post question');
+		}
+
+		if (!stream) {
+			onChunk(await response.text());
+			return;
 		}
 
 		const reader = response.body?.getReader();
@@ -187,9 +181,7 @@ export async function postQuestion(
 			}
 
 			buffer += decoder.decode(value, { stream: true });
-
 			const lines = buffer.split('\n\n');
-			buffer = lines.pop() || '';
 
 			for (const line of lines) {
 				if (line.startsWith('data: ')) {
@@ -201,6 +193,8 @@ export async function postQuestion(
 					onChunk(data);
 				}
 			}
+
+			buffer = lines.pop() || '';
 		}
 
 		onDone();

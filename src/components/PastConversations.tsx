@@ -11,14 +11,15 @@ export default function PastConversations(props: PastConversationProps) {
 	const pastConversations = useRivusStore((state) => state.pastConversations);
 	const setPastConversations = useRivusStore((state) => state.setPastConversations);
 
-	const { authenticationToken, endpoints, errorComponent, loadingComponent } =
+	const { authenticationToken, endpoints, errorComponent, loadingComponent, apiUrl } =
 		useRivusContext();
 
 	const pastConversationsQuery = useSWR('past-conversations', async () => {
-		return await getPastConversations(
-			authenticationToken,
-			endpoints.getPastConversations
-		);
+		return await getPastConversations({
+			endpoint: endpoints.getPastConversations,
+			url: apiUrl,
+			token: authenticationToken,
+		});
 	});
 
 	useEffect(() => {
