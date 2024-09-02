@@ -118,14 +118,22 @@ interface ConversationMetadata<T> {
 }
 ```
 
+As long as you have a backend that can serve these two types of data, and send streamed/non-streamed responses from LLM services, Rivus will work seamlessly with your application.
+
 ## Backend Integration
 
-Rivus is designed to work with a backend that stores conversation data. The `conversationId` is used as a unique identifier to link `ConversationData` and `ConversationMetadata`.
+Rivus is designed to work with a backend that has access to stores of conversation data. The `conversationId` is used as a unique identifier to link `ConversationData` and `ConversationMetadata`.
 
 A typical setup involves:
 
 1. Fetching all user conversations' metadata using a `userId`
 2. Fetching individual conversation data using the `conversationId` from the metadata array
+
+If you would like to authenticate requests on your backend you can specify `authenticationToken` in RivusProvider's options and it will be added to each request in the `Authorization` header like this:
+
+```typescript
+'Authorization': `Bearer ${token}`
+```
 
 ## Contributing
 
