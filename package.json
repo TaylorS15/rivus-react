@@ -1,6 +1,6 @@
 {
   "name": "rivus-react",
-  "version": "0.1.91",
+  "version": "0.1.92",
   "description": "An easy-to-use library for integrating AI chat conversations into your React application",
   "type": "module",
   "main": "dist/index.js",
