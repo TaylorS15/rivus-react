@@ -18,8 +18,6 @@ npm install rivus-react
 
 ## Quick Start
 
-1. Import the necessary components and styles:
-
 ```jsx
 import {
   RivusProvider,
@@ -102,6 +100,7 @@ Rivus uses two main data types:
 ```typescript
 interface ConversationData {
   conversationId: string;
+  userId: string;
   messages: {
     role: 'user' | 'assistant';
     content: string;
@@ -128,6 +127,12 @@ A typical setup involves:
 
 1. Fetching all user conversations' metadata using a `userId`
 2. Fetching individual conversation data using the `conversationId` from the metadata array
+
+Rivus sends the conversationId to the getConversationData and deleteConversation endpoints using a query parameter like so:
+
+```typescript
+const url = `${url}/${endpoint}?conversationId=${conversationId}`;
+```
 
 If you would like to authenticate requests on your backend you can specify `authenticationToken` in RivusProvider's options and it will be added to each request in the `Authorization` header like this:
 
