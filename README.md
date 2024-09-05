@@ -142,7 +142,7 @@ If you would like to authenticate requests on your backend you can specify `auth
 
 ## Contributing
 
-[TODO]
+<https://github.com/TaylorS15/rivus-react>
 
 ## License
 
