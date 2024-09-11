@@ -4,20 +4,20 @@ import clsx from 'clsx';
 import { ChatBubbleProps } from '../types';
 
 export default function ChatBubble(props: ChatBubbleProps) {
-	const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-	useEffect(() => {
-		setTimeout(() => {
-			setIsLoaded(true);
-		}, 100);
-	}, []);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+  }, []);
 
-	return (
-		<div
-			className={clsx('chat-bubble', props.className)}
-			data-role={props.role}
-			data-loaded={isLoaded}>
-			<p>{props.content}</p>
-		</div>
-	);
+  return (
+    <div
+      className={clsx('chat-bubble', props.className)}
+      data-role={props.role}
+      data-loaded={isLoaded}>
+      <p>{props.content}</p>
+    </div>
+  );
 }

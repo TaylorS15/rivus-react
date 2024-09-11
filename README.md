@@ -1,5 +1,7 @@
 # Rivus React
 
+_This is a WIP library that is subject to breaking changes. If you would like to contribute please consider opening an issue or submitting a pull request to the github repository linked below_
+
 Rivus React is an easy-to-implement library for adding AI chat messaging to any React application.
 
 ## Features
